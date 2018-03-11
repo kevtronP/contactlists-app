@@ -29,11 +29,11 @@ if input_option == "1"
     params["first_name"] = gets.chomp
     print "Please enter contact's last name: "
     params["last_name"] = gets.chomp
-    print "Please enter contact's email"
+    print "Please enter contact's email: "
     params["email"] = gets.chomp
-    print ["Please enter contact's phone number"]
+    print ["Please enter contact's phone number: "]
     params["phone_number"] = gets.chomp
-    response = Unirest.post("http://localhost:3000/v1/contacts/", paramaters: params)
+    response = Unirest.post("http://localhost:3000/v1/contacts/", parameters: params)
     contact = response.body
     puts JSON.pretty_generate(contact)
 
@@ -42,15 +42,16 @@ if input_option == "1"
     contact_id = gets.chomp
     response = Unirest.get("http://localhost:3000/v1/contacts#{contact_id}")
     params = {}
-    print "Please enter the updated first name (#{contact[first_name]})"
+    print "Please enter the updated first name (#{contact[first_name]}): "
     params["first_name"] = gets.chomp
-    print "Please enter the updated last name (#{contact[last_name]})"
+    print "Please enter the updated last name (#{contact[last_name]}): "
     params["last_name"] = gets.chomp
-    print "Please enter the updated email"
+    print "Please enter the updated email: "
     params["email"] = gets.chomp
-    print "Please enter the updated phone number (#{contact[phone_number]})"
+    print "Please enter the updated phone number (#{contact[phone_number]}): "
     params["phone_number"] = gets.chomp
     params.delete_if { |_key, value| value.empty? }
+    response = Unirest.patch("http://localhost:3000/v1/contacts/#{contact_id}", parameters: params)
     updated_contact = response.body
     puts JSON.pretty_generate(updated_contact)
 
@@ -60,6 +61,6 @@ if input_option == "1"
     response = Unirest.delete("http://localhost:3000/v1/contacts#{contact_id}")
     contact = response.body
     puts JSON.pretty_generate(contact)
-    
+
   elsif puts "Not a valid input."
 end
