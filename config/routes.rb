@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     get "/contacts" => "contacts#index"
     get "/contacts/:id" => "contacts#show"
-    post "/contacts/:id" => "contacts#create"
+    post "/contacts/" => "contacts#create"
     patch "/contacts/:id" => "contacts#update"
     delete "/contacts/:id" => "contacts#destroy"
   end
