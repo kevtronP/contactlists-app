@@ -1,12 +1,20 @@
 class V1::ContactsController < ApplicationController
 
   def index
-    contacts = Contact.all
-    search_terms = params[:q]
-    if search_terms
-      contacts = contacts.where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ? OR phone_number ILIKE ?", "%#{search_terms}%", "%#{search_terms}%","%#{search_terms}%","%#{search_terms}%",)
+
+    if current_user
+
+      contacts = current_user.contacts.order(:id => :asc)
+
+      search_terms = params[:q]
+      if search_terms
+        contacts = contacts.where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ? OR phone_number ILIKE ?", "%#{search_terms}%", "%#{search_terms}%","%#{search_terms}%","%#{search_terms}%",)
+      end
+      render json: contacts.as_json
+
+    else
+      render json: []
     end
-    render json: contacts.as_json
   end
 
   def show
@@ -21,7 +29,8 @@ class V1::ContactsController < ApplicationController
       last_name: params[:last_name],
       email: params[:email],
       phone_number: params[:phone_number],
-      bio: params[:bio]
+      bio: params[:bio],
+      user_id: params[:user_id]
     )
     if contact.save
       render json: contact.as_json

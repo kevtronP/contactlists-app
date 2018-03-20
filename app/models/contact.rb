@@ -3,6 +3,8 @@ class Contact < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true, format: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/
 
+  belongs_to :user
+
   def friendly_updated_at
     updated_at.strftime("%B %e, %Y")
   end

@@ -96,6 +96,7 @@ elsif input_option == "3"
   params["phone_number"] = gets.chomp
   print "Please enter a bio for the contact: "
   params["bio"] = gets.chomp
+  params[:user_id] = current_user.user_id
   response = Unirest.post("http://localhost:3000/v1/contacts/", parameters: params)
   contact = response.body
   if contact["errors"]
