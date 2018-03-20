@@ -1,7 +1,59 @@
 require "unirest"
 
 system "clear"
+puts "Welcome to the Contacts app! Choose an option:"
+puts "[signup] Signup (create a user)"
+puts "[login] Login (create a JSON web token)"
+puts "[logout] Logout (delete the JSON web token)"
 
+input_option = gets.chomp
+
+if input_option == "signup"
+  print "Please enter your name: "
+  input_name = gets.chomp
+  print "Please enter your email: "
+  input_email = gets.chomp
+  print "Please enter a password: "
+  input_password = gets.chomp
+  print "Please confirm your password: "
+  input_password_confirmation = gets.chomp
+
+  params = 
+  {
+    name: "#{input_name}",
+    email: "#{input_email}",
+    password: "#{input_password}",
+    password_confirmation: "#{input_password_confirmation}"
+  }
+  response = Unirest.post("http://localhost:3000/v1/users", parameters: params)
+  p response.body
+
+elsif input_option == "login"
+  print "Please enter your login email: "
+  input_email = gets.chomp
+  print "Please enter your login password: "
+  input_password = gets.chomp
+  response = Unirest.post(
+    "http://localhost:3000/user_token",
+    parameters: {
+      auth: {
+        email: "#{input_email}",
+        password: "#{input_password}"
+      }
+    }
+  )
+  jwt = response.body["jwt"]
+  Unirest.default_header("Authorization", "Bearer #{jwt}")
+
+elsif input_option == "logout"
+  jwt = ""
+  Unirest.clear_default_headers()
+end
+    
+
+system "clear"
+
+p jwt
 puts "Select an option"
 puts "[1] Show all contacts"
 puts "[1b] Search for contact by first name (Kevin)"
